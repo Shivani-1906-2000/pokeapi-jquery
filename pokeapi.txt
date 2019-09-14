@@ -1,0 +1,32 @@
+<script>
+    var pokeapiurl="https://pokeapi.co/api/v2/generation/1/";
+    var pokemonbyname="https://pokeapi.co/api/v2/pokemon/";
+    $.getJSON(pokeapiurl).done(function(data)
+    {
+        $.each(data.pokemon_species,function(index,pokemon)
+        {
+            var link=$('<a>').attr('id',pokemon.name).attr('href','#').append($('<strong>')).text(pokemon.name);
+            x=(index+1)+" is the index of "+pokemon.name;
+            para=$('<p>').html(x).append(link);
+            para.appendTo('#pokemon_div');
+            
+            link.click(function(e)
+            {
+                e.preventDefault();
+                $.getJSON(pokemonbyname+pokemon.name).done((details)=>
+                {
+                    $('#pokemon_details').empty();
+                    $('#pokemon_details').append('<h3>').text(pokemon.name);
+                    $('<img>').attr('src',details.sprites.back_default).appendTo('#pokemon_details');
+                    $('<img>').attr('src',details.sprites.back_shiny).appendTo('#pokemon_details');
+                    $('<img>').attr('src',details.sprites.front_default).appendTo('#pokemon_details');
+                    $('<img>').attr('src',details.sprites.front_shiny).appendTo('#pokemon_details');
+                })
+
+            })
+        })
+    }).fail(function()
+    {
+        alert("failed")
+    })
+    </script>
